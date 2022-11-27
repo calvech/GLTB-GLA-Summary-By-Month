@@ -1,0 +1,36 @@
+let
+    Source = Folder.Files("C:\Users\christopher.calvert\Google Drive\CSTCC\GLA Summary\GLA Summary by Month"),
+    #"Filtered Hidden Files1" = Table.SelectRows(Source, each [Attributes]?[Hidden]? <> true),
+    #"Invoke Custom Function1" = Table.AddColumn(#"Filtered Hidden Files1", "Transform File", each #"Transform File"([Content])),
+    #"Renamed Columns1" = Table.RenameColumns(#"Invoke Custom Function1", {"Name", "Fiscal Year"}),
+    #"Removed Other Columns1" = Table.SelectColumns(#"Renamed Columns1", {"Fiscal Year", "Transform File"}),
+    #"Expanded Table Column1" = Table.ExpandTableColumn(#"Removed Other Columns1", "Transform File", Table.ColumnNames(#"Transform File"(#"Sample File"))),
+    #"Changed Type" = Table.TransformColumnTypes(#"Expanded Table Column1",{{"Fiscal Year", type text}, {"GL Accounts", type text}, {"Gla Month", type text}, {"Transaction Amount (Total)", type number}}),
+    #"Extract Fiscal Year" = Table.TransformColumns(#"Changed Type", {{"Fiscal Year", each Text.Middle(_, 26, 11), type text}}),
+    #"Add Date" = Table.AddColumn(#"Extract Fiscal Year", "Date", each Date.FromText (
+
+"20"&
+    (
+if 
+Number.FromText([Gla Month])>6 
+then 
+Text.From(
+Number.FromText(
+Text.Middle([Fiscal Year],2,2) 
+)-1
+)
+else 
+Text.Middle([Fiscal Year],2,2)
+    ) & 
+    [Gla Month]
+    &
+    (if 
+    [Gla Month] = "02" then "28" else 
+    if [Gla Month] = "09" or [Gla Month] = "04" or [Gla Month] = "06" or [Gla Month] = "11"
+    then "30" else "31"
+    )
+)),
+    #"Change Date to Date Type" = Table.TransformColumnTypes(#"Add Date",{{"Date", type date}}),
+    #"Add Budget Actual" = Table.AddColumn(#"Change Date to Date Type", "Budget Actual", each Text.End([Fiscal Year], 6), type text)
+in
+    #"Add Budget Actual"
