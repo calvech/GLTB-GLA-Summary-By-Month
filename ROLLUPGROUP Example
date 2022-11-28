@@ -1,0 +1,18 @@
+ROLLUPGROUP = 
+ADDCOLUMNS(
+CALCULATETABLE(
+    SUMMARIZE(
+        GLTB,
+        ROLLUP(ROLLUPGROUP(GLTB[Fiscal Year], LOOKUP_FUND[FUND_ID], LOOKUP_OBJECT[HEADER], LOOKUP_OBJECT[CLASS], LOOKUP_OBJECT[FIN. STATEMENT BOT] )),
+        "Year Total",ISSUBTOTAL(GLTB[Fiscal Year]),
+        "Fund Total", ISSUBTOTAL(LOOKUP_FUND[FUND_ID]),
+        "Header Total", ISSUBTOTAL(LOOKUP_OBJECT[HEADER]),
+        "Class Total", ISSUBTOTAL(LOOKUP_OBJECT[CLASS]),
+        "FS Total", ISSUBTOTAL(LOOKUP_OBJECT[FIN. STATEMENT BOT]),
+        "Amount", GLTB[GL AMT]
+    ),
+    TREATAS({"FY22 Actual", "FY23 Actual"},GLTB[Fiscal Year]),
+    TREATAS({"Revenue","Expenses"},LOOKUP_OBJECT[HEADER])
+),
+"Header II",IF ([Header Total]=TRUE(),"Net Surplus",[HEADER])
+)
