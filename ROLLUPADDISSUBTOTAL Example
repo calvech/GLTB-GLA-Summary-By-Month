@@ -1,0 +1,13 @@
+ROLLUPADDISSUBTOTAL = 
+ADDCOLUMNS(
+SUMMARIZECOLUMNS(
+ ROLLUPADDISSUBTOTAL(
+        GLTB[Fiscal Year], "Year Total",
+        LOOKUP_OBJECT[HEADER], "Header Total"
+        ),
+        TREATAS({"Revenue","Expenses"},LOOKUP_OBJECT[HEADER]),
+        TREATAS({"FY22 Actual", "FY23 Actual"},GLTB[Fiscal Year]),
+        "Amount",GLTB[GL AMT]
+),
+"Header II",IF([Header Total]=TRUE(),"Net Surplus",[HEADER])
+)
