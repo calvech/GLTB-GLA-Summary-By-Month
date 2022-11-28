@@ -1,0 +1,11 @@
+ROLLUP = CALCULATETABLE(
+    SUMMARIZE(
+        GLTB,
+        ROLLUP(GLTB[Fiscal Year], LOOKUP_OBJECT[HEADER]),
+        "Year Total",ISSUBTOTAL(GLTB[Fiscal Year]),
+        "Revenue Expense Total", ISSUBTOTAL(LOOKUP_OBJECT[HEADER]),
+        "Amount", GLTB[GL AMT]
+    ),
+    TREATAS({"FY22 Actual", "FY23 Actual"},GLTB[Fiscal Year]),
+    TREATAS({"Revenue","Expenses"},LOOKUP_OBJECT[HEADER])
+)
