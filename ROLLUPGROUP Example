@@ -13,5 +13,5 @@ CALCULATETABLE(
     TREATAS({"FY22 Actual", "FY23 Actual"},GLTB[Fiscal Year]),
     TREATAS({"Revenue", "Expenses"},LOOKUP_OBJECT[HEADER])
 ),
-"Header II",IF ([Header Total]=TRUE(),"Net Surplus",[HEADER])
+"Header II", IF(AND ([Header Total] =TRUE(),[Fiscal Year Total]=FALSE()), "Net Surplus",[HEADER])
 )
