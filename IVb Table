@@ -1,0 +1,15 @@
+IVb Table = 
+ADDCOLUMNS(
+CALCULATETABLE(
+SUMMARIZECOLUMNS(
+    GLTB[Fiscal Year],
+    ROLLUPADDISSUBTOTAL(LOOKUP_OBJECT[FIN. STATEMENT BOT],"FS Total"),
+    FILTER(LOOKUP_FUND,LOOKUP_FUND[FUND_ID]<>"068"),
+    FILTER(LOOKUP_FUND,LOOKUP_FUND[FUND_ID]<>"075"),
+    TREATAS({"Revenue", "Expenses"},LOOKUP_OBJECT[HEADER]),
+    TREATAS({"FY22 Actual", "FY23 Actual"},GLTB[Fiscal Year]),
+    "GL AMT",GLTB[GL AMT]
+)),
+"FS Total2",IF ([FS Total]=TRUE(),1,0)
+)
+--- Then add column IF THEN usisn FS Total2 to select Net Surplus of FIN. STATEMENT BOT
