@@ -1,0 +1,8 @@
+GLTB FY23 YTD = 
+ADDCOLUMNS(
+CALCULATETABLE(
+    GLTB,
+    GLTB[Fiscal Year]="FY23 Budget",
+    'YTD Date Table'[Date]
+),
+"Fiscal Year2","FY23 YTD Budget")
