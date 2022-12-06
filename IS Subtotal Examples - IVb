@@ -1,0 +1,15 @@
+IVb SUBTOTAL = 
+IF(
+    COUNTROWS(
+        VALUES(SORT_CLASS[CLASS]))=1,
+        SWITCH(
+            VALUES(
+                SORT_CLASS[CLASS INDEX]),
+                "4", [Revenue],
+                "5", [Personnel Expenses],
+                "6",[Operating Expenses],
+                "7",[Transfers],
+                BLANK()
+        ),
+        [Net Surplus]
+)
